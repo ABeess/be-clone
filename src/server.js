@@ -1,5 +1,5 @@
 import app from "./index.js";
 
-app.listen({ port: 4000 }, () => {
-  console.log("Server run port 4000");
+app.listen({ port: process.env.PORT }, () => {
+  console.log("Server run port ", process.env.PORT);
 });
