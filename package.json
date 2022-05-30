@@ -1,23 +1,64 @@
 {
-  "name": "be-hiworld",
-  "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "nodemon ./src/server.js",
-    "start": "node ./src/server.js"
+  "name": "study-service",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Tho",
+    "email": "myworld20011999@gmail.com"
   },
-  "repository": "https://gitlab.com/h3986/be-hiworld.git",
-  "author": "Tho Tran",
-  "license": "MIT",
-  "devDependencies": {
-    "nodemon": "^2.0.16"
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^16.0.0",
+    "yarn": ">= 0.18.0"
+  },
+  "scripts": {
+    "test": "yarn run lint && yarn run jest",
+    "lint": "standard",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "jest": "jest --forceExit"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "ignore": []
   },
   "dependencies": {
-    "body-parser": "^1.20.0",
+    "@feathersjs/authentication": "^4.5.11",
+    "@feathersjs/authentication-local": "^4.5.11",
+    "@feathersjs/authentication-oauth": "^4.5.11",
+    "@feathersjs/configuration": "^4.5.11",
+    "@feathersjs/errors": "^4.5.11",
+    "@feathersjs/express": "^4.5.11",
+    "@feathersjs/feathers": "^4.5.11",
+    "@feathersjs/transport-commons": "^4.5.15",
+    "@kalisio/feathers-distributed": "^1.0.5",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
-    "express": "^4.18.1",
-    "mongoose": "^6.3.1"
+    "feathers-mongoose": "^8.5.1",
+    "helmet": "^4.6.0",
+    "mongodb-core": "^3.2.7",
+    "mongoose": "^6.1.4",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.15",
+    "standard": "^17.0.0"
   }
 }

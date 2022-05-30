@@ -1,37 +1,13 @@
-import express from "express";
-import bodyParse from "body-parser";
-import cors from "cors";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import routes from "./routes/index.js";
+/* eslint-disable no-console */
+const logger = require('./logger')
+const app = require('./app')
+const port = app.get('port')
+const server = app.listen(port)
 
-dotenv.config();
-//Connect Mongoose
-const mongooseOptions = {
-  readPreference: "primaryPreferred",
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  //   useFindAndModify: false,
-  user: process.env.DB_USER,
-  pass: process.env.DB_PASS,
-  promiseLibrary: global.Promise,
-};
+process.on('unhandledRejection', (reason, p) =>
+  logger.error('Unhandled Rejection at: Promise ', p, reason)
+)
 
-try {
-  mongoose.connect(process.env.DATABASE_HOST, mongooseOptions);
-
-  // eslint-disable-next-line no-console
-  console.info(`Connected to mongo`);
-} catch (error) {
-  // eslint-disable-next-line no-console
-  console.error(`Could not start the app: `, error);
-}
-
-const app = express();
-
-app.use(bodyParse.json());
-app.use(cors());
-
-app.use("/", routes);
-
-export default app;
+server.on('listening', () =>
+  logger.info('Feathers application started on http://%s:%d', app.get('host'), port)
+)
