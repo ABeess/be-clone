@@ -8,9 +8,6 @@ const logger = require("./logger");
 const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
-
-const distribution = require("@kalisio/feathers-distributed");
-
 const middleware = require("./middleware");
 const services = require("./services");
 const appHooks = require("./app.hooks");
@@ -37,18 +34,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get("public"), "favicon.ico")));
 // Host the public folder
 app.use("/", express.static(app.get("public")));
-
-app.configure(
-  distribution({
-    // hooks: { before: { all: [] } },
-    // middlewares: { after: express.errorHandler() },
-    // We don't produce services we only consume
-    remoteServices: (service) => false,
-    cote: {
-      broadcast: "192.168.1.3",
-    },
-  })
-);
 
 // Set up Plugins and providers
 app.configure(express.rest());

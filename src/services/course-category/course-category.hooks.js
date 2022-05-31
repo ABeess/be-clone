@@ -1,5 +1,5 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
-
+const { softDelete } = require("feathers-hooks-common");
 module.exports = {
   before: {
     all: [],
@@ -8,7 +8,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: [],
+    remove: [softDelete()],
   },
 
   after: {

@@ -14,6 +14,5 @@ module.exports = function (app) {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('course-category');
-
   service.hooks(hooks);
 };

@@ -8,7 +8,10 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      name: { type: String },
+      deleteId: { type: Schema.Types.ObjectId, default: null },
+      name: { type: String, required: true },
+      parentId: { type: Schema.Types.ObjectId },
+      slug: { type: String, required: true },
     },
     {
       timestamps: true,
