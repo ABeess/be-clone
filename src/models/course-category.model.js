@@ -9,15 +9,19 @@ module.exports = function (app) {
   const schema = new Schema(
     {
       deleteId: { type: Schema.Types.ObjectId, default: null },
+      deleted: { type: Boolean, default: false },
       name: { type: String, required: true },
-      parentId: { type: Schema.Types.ObjectId },
+      parentId: {
+        type: Schema.Types.ObjectId,
+        ref: "courseCategory",
+        default: null,
+      },
       slug: { type: String, required: true },
     },
     {
       timestamps: true,
     }
   );
-
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
   if (mongooseClient.modelNames().includes(modelName)) {
