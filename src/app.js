@@ -3,6 +3,7 @@ const favicon = require("serve-favicon");
 const compress = require("compression");
 const helmet = require("helmet");
 const cors = require("cors");
+require("dotenv").config();
 const logger = require("./logger");
 
 const feathers = require("@feathersjs/feathers");
