@@ -1,16 +1,11 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 const { softDelete, disablePagination } = require("feathers-hooks-common");
-const search = require("feathers-mongodb-fuzzy-search");
+const search = require("../../lib/mongoose-fuzzy-search");
 
 module.exports = {
   before: {
-    all: [
-      // search({
-      //   fields: ["name"],
-      // }),
-      softDelete(),
-    ],
-    find: [disablePagination()],
+    all: [softDelete()],
+    find: [disablePagination(), search],
     get: [],
     create: [],
     update: [],

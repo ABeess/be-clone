@@ -10,7 +10,7 @@ module.exports = function (app) {
     {
       deleteId: { type: Schema.Types.ObjectId, default: null },
       deleted: { type: Boolean, default: false },
-      name: { type: String, required: true },
+      name: { type: String, required: true, lowercase: true },
       parentId: {
         type: Schema.Types.ObjectId,
         ref: "courseCategory",
@@ -22,6 +22,8 @@ module.exports = function (app) {
       timestamps: true,
     }
   );
+
+  schema.index({ name: "text" });
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
   if (mongooseClient.modelNames().includes(modelName)) {
