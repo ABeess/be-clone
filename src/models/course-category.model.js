@@ -16,7 +16,7 @@ module.exports = function (app) {
         ref: "courseCategory",
         default: null,
       },
-      slug: { type: String, required: true },
+      slug: { type: String, required: true, lowercase: true },
     },
     {
       timestamps: true,

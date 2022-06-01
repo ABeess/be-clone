@@ -1,11 +1,11 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
-const { softDelete, disablePagination } = require("feathers-hooks-common");
-const search = require("../../lib/mongoose-fuzzy-search");
+const multer = require("multer");
+const upload = multer({ storage: multer.diskStorage({}) });
 
 module.exports = {
   before: {
-    all: [softDelete()],
-    find: [disablePagination(), search],
+    all: [],
+    find: [],
     get: [],
     create: [],
     update: [],

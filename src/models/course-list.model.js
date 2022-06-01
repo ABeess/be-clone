@@ -8,19 +8,19 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      title: { type: String, required: true },
+      title: { type: String, required: true, lowwerCase: true },
       subTitle: { type: String, required: true },
       category: {
         type: Schema.Types.ObjectId,
-        ref: "course-category",
+        ref: "courseCategory",
         required: true,
       },
       startDate: { type: Date, required: true },
       endDate: { type: Date, required: true },
       description: { type: String, required: true },
       thumbnail: {
-        url: { type: String, default: "af" },
-        id: { type: String, default: "af" },
+        url: { type: String, require: true },
+        id: { type: String, require: true },
       },
       level: {
         type: String,
@@ -31,6 +31,8 @@ module.exports = function (app) {
         required: true,
       },
       requirement: { type: String, required: true },
+      deleted: { type: Boolean, default: false },
+      deleteId: { type: Schema.Types.ObjectId, default: null },
     },
     {
       timestamps: true,
