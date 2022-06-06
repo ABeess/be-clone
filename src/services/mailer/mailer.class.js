@@ -7,10 +7,12 @@ exports.Mailer = class Mailer extends Service {
     const code = Math.floor(Math.random() * 1000000);
     const transport = nodemailer.createTransport({
       service: "Gmail",
+      port: 465,
       auth: {
         user: process.env.SECRET_EMAIL,
         pass: process.env.SECRET_PASSWORD,
       },
+      authMethod: "PLAIN",
     });
     try {
       await transport.sendMail({
