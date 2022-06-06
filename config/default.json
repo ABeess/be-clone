@@ -9,7 +9,7 @@
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "m49tEipKvGrXAI7dD+eoUBrIQDI=",
+    "secret": "SECRET_HASH_KEY",
     "authStrategies": [
       "jwt",
       "local"
@@ -26,7 +26,23 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    },
+    "oauth": {
+      "redirect": "/",
+      "google": {
+        "key": "GOOGLE_CLIENT_ID",
+        "secret": "GOOGLE_CLIENT_SECRET",
+        "scope": [
+          "email",
+          "profile",
+          "openid"
+        ]
+      },
+      "facebook": {
+        "key": "<facebook oauth key>",
+        "secret": "<facebook oauth secret>"
+      }
     }
   },
-  "mongodb": "mongodb://localhost:27017/study_service"
+  "mongodb": "DATABASE_MONGODB_URL"
 }

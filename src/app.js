@@ -9,6 +9,11 @@ const logger = require("./logger");
 const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
+const redis = require("redis");
+const session = require("express-session");
+const { expressOauth } = require("@feathersjs/authentication-oauth");
+const RedisStore = require("connect-redis")(session);
+const redisClient = redis.createClient();
 const middleware = require("./middleware");
 const services = require("./services");
 const appHooks = require("./app.hooks");
@@ -17,9 +22,7 @@ const channels = require("./channels");
 const authentication = require("./authentication");
 
 const mongoose = require("./mongoose");
-
 const app = express(feathers());
-
 // Load app configuration
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
@@ -44,6 +47,16 @@ app.configure(mongoose);
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
 app.configure(authentication);
+app.configure(
+  expressOauth({
+    expressSession: session({
+      store: new RedisStore({ client: redisClient }),
+      secret: "keyboard cat",
+      resave: false,
+      saveUninitialized: false,
+    }),
+  })
+);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Set up event channels (see channels.js)
