@@ -9,6 +9,7 @@ module.exports = function (app) {
     {
       firstName: { type: String, required: true, lowercase: true },
       lastName: { type: String, required: true, lowercase: true },
+      deleted: { type: Boolean, default: false },
       phone: { type: Number, default: -1 },
       profilePhoto: {
         url: { type: String, default: "" },

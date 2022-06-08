@@ -15,7 +15,11 @@ exports.Users = class Users extends Service {
         return "Redirect to verify page";
       } else {
         const isAdmin =
-          decode(params?.authentication?.accessToken)?.isAdmin || false;
+          params?.authentication &&
+          params?.authentication.accessToken &&
+          decode(params?.authentication?.accessToken)?.isAdmin
+            ? true
+            : false;
         if (isAdmin) {
           const existEmail = await this.Model.find({ email });
           if (existEmail[0] !== undefined)
@@ -33,13 +37,16 @@ exports.Users = class Users extends Service {
         return await super.create(data, params);
       }
     } catch (error) {
-      return new GeneralError(new Error("Lỗi hệ thống"));
+      return new GeneralError(new Error(error || "Lỗi hệ thống"));
     }
   }
   async patch(id, data, params) {
     const { email } = data;
     try {
-      if (JSON.parse(params.query.checking.toLowerCase())) {
+      if (
+        params?.query?.checking &&
+        JSON.parse(params?.query?.checking?.toLowerCase())
+      ) {
         const existEmail = await this.Model.find({ email });
         if (existEmail[0] === undefined)
           return new GeneralError(
@@ -61,7 +68,7 @@ exports.Users = class Users extends Service {
         return await super.patch(id, data, params);
       }
     } catch (error) {
-      return new GeneralError(new Error(error?.message || "Lỗi hệ thống!"));
+      return new GeneralError(new Error(error || "Lỗi hệ thống!"));
     }
   }
 };

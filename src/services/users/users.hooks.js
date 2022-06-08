@@ -2,11 +2,12 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 const search = require("../../lib/mongoose-fuzzy-search");
 const { hashPassword, protect } =
   require("@feathersjs/authentication-local").hooks;
+const { softDelete, disablePagination } = require("feathers-hooks-common");
 
 module.exports = {
   before: {
-    all: [],
-    find: [authenticate("jwt"), search],
+    all: [softDelete()],
+    find: [authenticate("jwt"), disablePagination(), search],
     get: [authenticate("jwt")],
     create: [hashPassword("password")],
     update: [hashPassword("password"), authenticate("jwt")],

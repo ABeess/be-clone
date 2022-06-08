@@ -31,7 +31,19 @@ app.use(
     contentSecurityPolicy: false,
   })
 );
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3039", process.env.SECRET_FRONTEND_DOMAIN],
+    allowedHeaders: [
+      "Content-Type",
+      "Origin",
+      "X-Requested-With",
+      "Accept",
+      "Authorization",
+    ],
+    credentials: true,
+  })
+);
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

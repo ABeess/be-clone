@@ -1,4 +1,3 @@
-const { authenticate } = require("@feathersjs/authentication").hooks;
 const { protect } = require("@feathersjs/authentication-local").hooks;
 
 module.exports = {
@@ -13,7 +12,7 @@ module.exports = {
   },
 
   after: {
-    all: [protect("verifyCode")],
+    all: [protect("refreshToken")],
     find: [],
     get: [],
     create: [],

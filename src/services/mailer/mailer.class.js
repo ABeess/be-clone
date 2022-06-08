@@ -26,7 +26,7 @@ exports.Mailer = class Mailer extends Service {
                 <p>${code}</p>
             </div>`,
       });
-      return super.create({ ...data, verifyCode: code }, params);
+      return await super.create({ ...data, verifyCode: code }, params);
     } catch (err) {
       return err;
     }

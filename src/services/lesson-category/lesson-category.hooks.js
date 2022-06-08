@@ -1,10 +1,11 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
-const { protect } = require("@feathersjs/authentication-local").hooks;
+const { softDelete, disablePagination } = require("feathers-hooks-common");
+const search = require("../../lib/mongoose-fuzzy-search");
 
 module.exports = {
   before: {
-    all: [],
-    find: [],
+    all: [softDelete()],
+    find: [disablePagination(), search],
     get: [],
     create: [],
     update: [],
@@ -13,7 +14,7 @@ module.exports = {
   },
 
   after: {
-    all: [protect("verifyCode")],
+    all: [],
     find: [],
     get: [],
     create: [],
