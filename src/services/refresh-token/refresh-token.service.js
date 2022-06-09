@@ -14,21 +14,26 @@ module.exports = function (app) {
     "/refresh-token",
     new RefreshToken(options, app),
     async (req, res, next) => {
-      if (
-        res?.hook?.params?.query?.logout?.toLowerCase() &&
-        JSON.parse(res?.hook?.params?.query?.logout?.toLowerCase())
-      ) {
-        res.clearCookie("refreshToken");
+      try {
+        if (
+          res?.hook?.params?.query?.logout?.toLowerCase() &&
+          JSON.parse(res?.hook?.params?.query?.logout?.toLowerCase())
+        ) {
+          res.clearCookie("refreshToken");
+          return next();
+        }
+        if (res?.hook?.params?.refreshToken) {
+          res.cookie("refreshToken", res?.hook?.params?.refreshToken, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 1000 * 60 * 60 * 24 * 365,
+          });
+          return next();
+        }
         return next();
+      } catch (error) {
+        next(error);
       }
-      if (res?.hook?.params?.refreshToken) {
-        res.cookie("refreshToken", res?.hook?.params?.refreshToken, {
-          httpOnly: true,
-          secure: false,
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
-      }
-      return next();
     }
   );
 

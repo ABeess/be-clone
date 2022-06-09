@@ -9,14 +9,7 @@ exports.RefreshToken = class RefreshToken extends Service {
   async create(data, params) {
     try {
       const { isAdmin, _id } = data;
-      const clientRefreshToken = params?.headers?.cookie?.split("=")[1] || "";
       const authService = new AuthenticationService(this.app);
-      const signAccessToken = async () => {
-        return await authService.createAccessToken({
-          sub: _id,
-          isAdmin,
-        });
-      };
       const signRefreshToken = async () => {
         return await authService.createAccessToken(
           {
@@ -29,39 +22,9 @@ exports.RefreshToken = class RefreshToken extends Service {
           process.env.SECRET_REFRESH_TOKEN
         );
       };
-      if (
-        params?.query?.login?.toLowerCase() &&
-        JSON.parse(params?.query?.login?.toLowerCase())
-      ) {
-        const refreshToken = await signRefreshToken();
-        params.refreshToken = refreshToken;
-        return await super.create({ refreshToken, userId: _id }, params);
-      }
-      const existRefreshToken = await this.Model.findOne({
-        userId: _id,
-        refreshToken: clientRefreshToken,
-      });
-      if (existRefreshToken?.refreshToken) {
-        const payload = await authService.verifyAccessToken(
-          clientRefreshToken,
-          {
-            expiresIn: "1y",
-          },
-          process.env.SECRET_REFRESH_TOKEN
-        );
-        if (payload?.sub) {
-          const refreshToken = await signRefreshToken();
-          await super.patch(existRefreshToken?._id, { refreshToken }, params);
-          params.refreshToken = refreshToken;
-          return {
-            accessToken: await signAccessToken(),
-          };
-        } else {
-          return new GeneralError(new Error("Refresh-token is not valid"));
-        }
-      } else {
-        return new GeneralError(new Error("Refresh-token is not found"));
-      }
+      const refreshToken = await signRefreshToken();
+      params.refreshToken = refreshToken;
+      return await super.create({ refreshToken, userId: _id }, params);
     } catch (error) {
       return new GeneralError(new Error(error || "Lỗi hệ thống!"));
     }
