@@ -58,6 +58,7 @@
     "feathers-shallow-populate": "^2.5.1",
     "helmet": "^4.6.0",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "mongodb-core": "^3.2.7",
     "mongoose": "^6.1.4",
     "multer": "^1.4.5-lts.1",
