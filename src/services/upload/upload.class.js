@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-const multer = require("multer");
 const cloudinary = require("../../middleware/cloudinary");
 
 exports.Upload = class Upload {

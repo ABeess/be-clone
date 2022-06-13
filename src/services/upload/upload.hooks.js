@@ -1,10 +1,8 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
-const multer = require("multer");
-const upload = multer({ storage: multer.diskStorage({}) });
 
 module.exports = {
   before: {
-    all: [],
+    all: [authenticate("jwt")],
     find: [],
     get: [],
     create: [],

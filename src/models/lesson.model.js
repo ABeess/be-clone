@@ -1,23 +1,26 @@
-// lesson-category-model.js - A mongoose model
+// lesson-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = "lessonCategory";
+  const modelName = "lesson";
   const mongooseClient = app.get("mongooseClient");
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
       name: { type: String, required: true, lowercase: true },
-      description: { type: String, required: true },
-      courseId: {
+      chapterId: {
         type: Schema.Types.ObjectId,
-        ref: "courseList",
+        ref: "lessonCategory",
         required: true,
       },
-      slug: { type: String, required: true },
       order: { type: Number, required: true },
-      deleted: { type: Boolean, default: false },
+      slug: { type: String, required: true },
+      description: { type: String, required: true },
+      thumbnail: {
+        url: { type: String, required: true, default: "" },
+        id: { type: String, required: true, default: "" },
+      },
     },
     {
       timestamps: true,

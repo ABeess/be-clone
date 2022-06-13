@@ -30,11 +30,15 @@ exports.RefreshToken = class RefreshToken extends Service {
     }
   }
   async remove(id, params) {
-    const clientRefreshToken = params?.headers?.cookie?.split("=")[1] || "";
-    const existRefreshToken = await this.Model.findOne({
-      userId: params?.query?.userId,
-      refreshToken: clientRefreshToken,
-    });
-    return await super.remove(existRefreshToken?._id, params);
+    try {
+      const clientRefreshToken = params?.headers?.cookie?.split("=")[1] || "";
+      const existRefreshToken = await this.Model.findOne({
+        userId: params?.query?.userId,
+        refreshToken: clientRefreshToken,
+      });
+      return await super.remove(existRefreshToken?._id, params);
+    } catch (error) {
+      return new GeneralError(new Error(error || "Lỗi hệ thống!"));
+    }
   }
 };

@@ -3,11 +3,9 @@ const {
   JWTStrategy,
 } = require("@feathersjs/authentication");
 const { LocalStrategy } = require("@feathersjs/authentication-local");
-const {
-  expressOauth,
-  OAuthStrategy,
-} = require("@feathersjs/authentication-oauth");
+const { expressOauth } = require("@feathersjs/authentication-oauth");
 const decode = require("jwt-decode");
+
 class MyAuthenticationService extends AuthenticationService {
   async getPayload(authResults, params) {
     const basePayload = await super.getPayload(authResults, params);
@@ -17,22 +15,7 @@ class MyAuthenticationService extends AuthenticationService {
     };
   }
 }
-class GoogleStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    const baseData = await super.getEntityData(profile);
-    return {
-      ...baseData,
-      email: profile.email,
-    };
-  }
-  // async getEntity(profile) {
-  //   const baseEntity = await super.getEntity(profile);
-  //   console.log(baseEntity);
-  //   return {
-  //     ...baseEntity,
-  //   };
-  // }
-}
+
 class MyJWTStrategy extends JWTStrategy {
   setup(app) {
     this.app = app;
@@ -44,7 +27,11 @@ class MyJWTStrategy extends JWTStrategy {
     const now = time.getTime();
     let accessToken = data?.accessToken;
     if (payload.exp * 1000 <= now) {
-      const refreshToken = params.headers?.cookie?.split("=")[1] || "";
+      const cookieInfo = params.headers?.cookie;
+      const cookieTokenKey = "refreshToken=";
+      const refreshToken = cookieInfo?.substring(
+        cookieInfo?.indexOf(cookieTokenKey) + cookieTokenKey?.length
+      );
       const refreshVerify = await auth.verifyAccessToken(
         refreshToken,
         {
@@ -77,7 +64,6 @@ module.exports = (app) => {
 
   authentication.register("jwt", new MyJWTStrategy());
   authentication.register("local", new LocalStrategy());
-  authentication.register("google", new GoogleStrategy());
 
   app.use("/authentication", authentication);
   app.configure(expressOauth());

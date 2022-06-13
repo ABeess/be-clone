@@ -1,7 +1,6 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 const { softDelete, disablePagination } = require("feathers-hooks-common");
 const search = require("../../lib/mongoose-fuzzy-search");
-
 module.exports = {
   before: {
     all: [softDelete()],
