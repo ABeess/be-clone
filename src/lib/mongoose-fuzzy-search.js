@@ -4,7 +4,6 @@ const { isEmpty } = require("lodash");
 
 module.exports = function search(context) {
   const param = context.params;
-  console.log(param.query.$search);
   if (param.query.$search) {
     const query = {};
     Object.keys(param.query.$search).map((item) => {
