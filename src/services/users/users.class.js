@@ -6,6 +6,9 @@ exports.Users = class Users extends Service {
     this.app = app;
   }
   async create(data, params) {
+    if (data?.googleId || data?.facebookId) {
+      return await super.create(data, params);
+    }
     const { email } = data;
     try {
       if (JSON.parse(params.query.checking.toLowerCase())) {
@@ -41,6 +44,9 @@ exports.Users = class Users extends Service {
     }
   }
   async patch(id, data, params) {
+    if (data?.googleId || data?.facebookId) {
+      return await super.patch(id, data, params);
+    }
     const { email } = data;
     try {
       if (

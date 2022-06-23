@@ -7,21 +7,22 @@ module.exports = function (app) {
   const mongooseClient = app.get("mongooseClient");
   const schema = new mongooseClient.Schema(
     {
+      googleId: { type: String },
+      facebookId: { type: String },
       firstName: { type: String, required: true, lowercase: true },
       lastName: { type: String, required: true, lowercase: true },
       deleted: { type: Boolean, default: false },
       phone: { type: Number, default: -1 },
       profilePhoto: {
         url: { type: String, default: "" },
-        id: { type: String, default: "" },
+        id: { type: String, default: "no_id_Oauth" },
       },
-      gender: { type: String, enum: ["male", "female"], required: true },
+      // gender: { type: String, enum: ["male", "female"], required: true },
       email: {
         type: String,
-        unique: true,
         lowercase: true,
       },
-      password: { type: String, require: true },
+      password: { type: String, require: true, default: "no_password_Oauth" },
       isAdmin: { type: Boolean, require: true, default: false },
     },
     {

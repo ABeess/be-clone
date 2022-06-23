@@ -12,7 +12,8 @@
     "secret": "SECRET_ACCESS_TOKEN",
     "authStrategies": [
       "jwt",
-      "local"
+      "local",
+      "oauth"
     ],
     "jwtOptions": {
       "header": {

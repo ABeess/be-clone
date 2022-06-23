@@ -10,13 +10,12 @@ module.exports = function (app) {
     {
       title: { type: String, required: true, lowwerCase: true },
       subTitle: { type: String, required: true },
+      slug: { type: String, required: true },
       category: {
         type: Schema.Types.ObjectId,
         ref: "courseCategory",
         required: true,
       },
-      startDate: { type: Date, required: true },
-      endDate: { type: Date, required: true },
       description: { type: String, required: true },
       thumbnail: {
         url: { type: String, require: true },
@@ -30,7 +29,6 @@ module.exports = function (app) {
         },
         required: true,
       },
-      requirement: { type: String, required: true },
       deleted: { type: Boolean, default: false },
       deleteId: { type: Schema.Types.ObjectId, default: null },
     },
