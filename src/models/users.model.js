@@ -17,7 +17,7 @@ module.exports = function (app) {
         url: { type: String, default: "" },
         id: { type: String, default: "no_id_Oauth" },
       },
-      // gender: { type: String, enum: ["male", "female"], required: true },
+      gender: { type: String, enum: ["male", "female"] },
       email: {
         type: String,
         lowercase: true,

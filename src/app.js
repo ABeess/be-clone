@@ -10,6 +10,7 @@ const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
 const redis = require("redis");
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const { expressOauth } = require("@feathersjs/authentication-oauth");
 const RedisStore = require("connect-redis")(session);
@@ -33,7 +34,11 @@ app.use(
 );
 app.use(
   cors({
-    origin: ["http://localhost:3039", process.env.SECRET_FRONTEND_DOMAIN],
+    origin: [
+      "http://localhost:3039",
+      "http://localhost:3034",
+      process.env.SECRET_FRONTEND_DOMAIN,
+    ],
     allowedHeaders: [
       "Content-Type",
       "Origin",
@@ -63,12 +68,14 @@ app.configure(
   expressOauth({
     expressSession: session({
       store: new RedisStore({ client: redisClient }),
-      secret: "keyboard cat",
+      secret: "sdfsdfasfsdaf",
       resave: false,
       saveUninitialized: false,
     }),
   })
 );
+//Parse cookie
+app.use(cookieParser("process.env.SECRET_SIGNED_COOKIES_CODE"));
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Set up event channels (see channels.js)

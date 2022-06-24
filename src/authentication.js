@@ -10,11 +10,17 @@ const {
 const decode = require("jwt-decode");
 
 class GoogleStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    // this will set 'googleId'
-    const baseData = await super.getEntityData(profile);
-    console.log("getEntityData", baseData);
-    // this will grab the picture and email address of the Google profile
+  setup(app) {
+    this.app = app;
+  }
+  async getEntityQuery(profile, params) {
+    return { email: profile.email };
+  }
+  async getEntityData(profile, entity, params) {
+    const baseData = await super.getEntityData(profile, entity, params);
+    if (params?.existUser) {
+      return baseData;
+    }
     return {
       ...baseData,
       profilePhoto: {
@@ -25,13 +31,21 @@ class GoogleStrategy extends OAuthStrategy {
       email: profile.email,
     };
   }
+  async findEntity(profile, params) {
+    const entity = await super.findEntity(profile, params);
+    params.existUser = entity;
+    return entity;
+  }
+  async updateEntity(entity, profile, params) {
+    if (!params?.existUser?.googleId) {
+      return super.updateEntity(entity, profile, params);
+    }
+    return params?.existUser;
+  }
 }
 class FacebookStrategy extends OAuthStrategy {
   async getEntityData(profile) {
-    // this will set 'googleId'
     const baseData = await super.getEntityData(profile);
-
-    // this will grab the picture and email address of the Google profile
     return {
       ...baseData,
       profilePicture: profile.picture,

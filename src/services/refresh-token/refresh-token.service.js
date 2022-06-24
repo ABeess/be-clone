@@ -14,6 +14,7 @@ module.exports = function (app) {
     "/refresh-token",
     new RefreshToken(options, app),
     async (req, res, next) => {
+      console.log("first");
       try {
         if (
           res?.hook?.params?.query?.logout?.toLowerCase() &&
@@ -22,6 +23,7 @@ module.exports = function (app) {
           res.clearCookie("refreshToken");
           return next();
         }
+        console.log(res?.hook?.params?.refreshToken);
         if (res?.hook?.params?.refreshToken) {
           res.cookie("refreshToken", res?.hook?.params?.refreshToken, {
             httpOnly: true,
