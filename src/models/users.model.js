@@ -22,7 +22,7 @@ module.exports = function (app) {
         type: String,
         lowercase: true,
       },
-      password: { type: String, require: true, default: "no_password_Oauth" },
+      password: { type: String, require: true },
       isAdmin: { type: Boolean, require: true, default: false },
     },
     {

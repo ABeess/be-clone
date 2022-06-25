@@ -9,6 +9,23 @@ const {
 } = require("@feathersjs/authentication-oauth");
 const decode = require("jwt-decode");
 
+const existAccountChecking = (rawUserData) => {
+  return (
+    rawUserData !== undefined &&
+    rawUserData.password === process.env.DEFAULT_OAUTH_PASSWORD
+  );
+};
+const OauthFlag = () => {
+  let flag = false;
+  return {
+    getFlag: () => {
+      return flag;
+    },
+    setFlag: (data) => {
+      flag = !!data;
+    },
+  };
+};
 class GoogleStrategy extends OAuthStrategy {
   setup(app) {
     this.app = app;
@@ -26,6 +43,7 @@ class GoogleStrategy extends OAuthStrategy {
       profilePhoto: {
         url: profile.picture,
       },
+      password: process.env.DEFAULT_OAUTH_PASSWORD,
       firstName: profile.given_name,
       lastName: profile.family_name,
       email: profile.email,
@@ -54,12 +72,47 @@ class FacebookStrategy extends OAuthStrategy {
   }
 }
 class MyAuthenticationService extends AuthenticationService {
+  setup(app) {
+    this.app = app;
+  }
   async getPayload(authResults, params) {
     const basePayload = await super.getPayload(authResults, params);
+    const { user } = authResults;
+    const sub = user._id.toString();
     return {
       ...basePayload,
-      isAdmin: authResults?.user?.isAdmin,
+      isAdmin: user?.isAdmin,
+      sub,
     };
+  }
+  async createAccessToken(payload) {
+    if (OauthFlag().getFlag()) {
+      return "exist_entity--no_token_response";
+    }
+    return super.createAccessToken(payload);
+  }
+  async authenticate(data, params, ...strategies) {
+    const authResult = await super.authenticate(data, params, ...strategies);
+    if (existAccountChecking(authResult)) {
+      OauthFlag().setFlag(true);
+      return {
+        name: "NotAuthenticated",
+        message: "Redirect to Oauth page",
+        code: 409,
+      };
+    }
+    return authResult;
+  }
+}
+class MyLocalStrategy extends LocalStrategy {
+  async authenticate(authentication, params) {
+    const query = { $limit: 1, email: authentication?.email };
+    const findRes = await this.entityService.find({ query });
+    const rawUserData = findRes?.data?.[0];
+    if (existAccountChecking(rawUserData)) {
+      return rawUserData;
+    }
+    return super.authenticate(authentication, params);
   }
 }
 
@@ -88,7 +141,7 @@ class MyJWTStrategy extends JWTStrategy {
       );
       const existRefreshToken = await this.app
         .service("refresh-token")
-        .find({ refreshToken, userId: payload?.sub });
+        .find({ refreshToken, userId: payload?.userId || payload?.sub });
       if (refreshVerify?.sub && existRefreshToken?.data[0] !== undefined) {
         accessToken = await auth.createAccessToken({
           sub: payload.sub,
@@ -110,7 +163,7 @@ module.exports = (app) => {
   const authentication = new MyAuthenticationService(app);
 
   authentication.register("jwt", new MyJWTStrategy());
-  authentication.register("local", new LocalStrategy());
+  authentication.register("local", new MyLocalStrategy());
   authentication.register("google", new GoogleStrategy());
   authentication.register("facebook", new FacebookStrategy());
 

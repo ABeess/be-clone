@@ -5,7 +5,6 @@ exports.RefreshToken = class RefreshToken extends Service {
   setup(app) {
     this.app = app;
   }
-
   async create(data, params) {
     try {
       const { isAdmin, _id } = data;
@@ -31,12 +30,16 @@ exports.RefreshToken = class RefreshToken extends Service {
   }
   async remove(id, params) {
     try {
-      const clientRefreshToken = params?.headers?.cookie?.split("=")[1] || "";
+      const cookieInfo = params.headers?.cookie;
+      const cookieTokenKey = "refreshToken=";
+      const clientRefreshToken = cookieInfo?.substring(
+        cookieInfo?.indexOf(cookieTokenKey) + cookieTokenKey?.length
+      );
       const existRefreshToken = await this.Model.findOne({
         userId: params?.query?.userId,
         refreshToken: clientRefreshToken,
       });
-      return await super.remove(existRefreshToken?._id, params);
+      return await super.remove(existRefreshToken?._id.toString(), params);
     } catch (error) {
       return new GeneralError(new Error(error || "Lỗi hệ thống!"));
     }

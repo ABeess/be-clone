@@ -15,7 +15,8 @@ exports.Users = class Users extends Service {
         const existEmail = await this.Model.find({ email });
         if (existEmail[0] !== undefined)
           return new GeneralError(new Error("Email đã tồn tại!"));
-        return "Redirect to verify page";
+        // return "Redirect to verify page";
+        return await super.create(data, params);
       } else {
         const isAdmin =
           params?.authentication &&
