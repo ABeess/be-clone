@@ -57,6 +57,7 @@
     "feathers-mongodb-fuzzy-search": "^2.0.1",
     "feathers-mongoose": "^8.5.1",
     "feathers-shallow-populate": "^2.5.1",
+    "googleapis": "^104.0.0",
     "helmet": "^4.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",

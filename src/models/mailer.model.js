@@ -8,7 +8,7 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      verifyCode: { type: Number, required: true },
+      verifyCode: { type: String, required: true },
     },
     {
       timestamps: true,
