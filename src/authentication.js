@@ -77,12 +77,16 @@ class MyAuthenticationService extends AuthenticationService {
   async getPayload(authResults, params) {
     const basePayload = await super.getPayload(authResults, params);
     const { user } = authResults;
-    const sub = user._id.toString();
-    return {
-      ...basePayload,
-      isAdmin: user?.isAdmin,
-      sub,
-    };
+    if (user) {
+      const sub = user._id.toString();
+      return {
+        ...basePayload,
+        isAdmin: user?.isAdmin,
+        sub,
+      };
+    } else {
+      return basePayload;
+    }
   }
   async createAccessToken(payload) {
     if (OauthFlag().getFlag()) {
