@@ -1,6 +1,7 @@
 const { Service } = require("feathers-mongoose");
 const { GeneralError } = require("@feathersjs/errors");
 const decode = require("jwt-decode");
+const { ExistOAuthUser, ExistEmail } = require("../../lib/error-handling");
 exports.Users = class Users extends Service {
   setup(app) {
     this.app = app;
@@ -13,8 +14,16 @@ exports.Users = class Users extends Service {
     try {
       if (JSON.parse(params.query.checking.toLowerCase())) {
         const existEmail = await this.Model.find({ email });
-        if (existEmail[0] !== undefined)
-          return new GeneralError(new Error("Email đã tồn tại!"));
+        if (
+          existEmail[0] !== undefined &&
+          existEmail[0].password === process.env.DEFAULT_OAUTH_PASSWORD
+        ) {
+          return new ExistOAuthUser(
+            "Tài khoản của bạn đã đăng nhập trước đó bằng GG hoặc FB!"
+          );
+        } else if (existEmail[0] !== undefined) {
+          return new ExistEmail("Email đã tồn tại!");
+        }
         // return "Redirect to verify page";
         return await super.create(data, params);
       } else {
