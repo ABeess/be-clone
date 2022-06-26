@@ -31,10 +31,10 @@ module.exports = function (app) {
         role: { type: String },
         company: { type: String },
       },
-      country: { type: String },
+      address: { type: String },
       followings: [{ type: Schema.Types.ObjectId, ref: "users" }],
       followers: [{ type: Schema.Types.ObjectId, ref: "users" }],
-      isAdmin: { type: Boolean, require: true, default: false },
+      role: [{ type: String, enum: ["admin", "newbie"] }],
     },
     {
       timestamps: true,

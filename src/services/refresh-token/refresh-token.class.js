@@ -7,13 +7,13 @@ exports.RefreshToken = class RefreshToken extends Service {
   }
   async create(data, params) {
     try {
-      const { isAdmin, _id } = data;
+      const { role, _id } = data;
       const authService = new AuthenticationService(this.app);
       const signRefreshToken = async () => {
         return await authService.createAccessToken(
           {
             sub: _id,
-            isAdmin,
+            role,
           },
           {
             expiresIn: "1y",

@@ -81,7 +81,7 @@ class MyAuthenticationService extends AuthenticationService {
       const sub = user._id.toString();
       return {
         ...basePayload,
-        isAdmin: user?.isAdmin,
+        role: user?.role,
         sub,
       };
     } else {
@@ -148,7 +148,7 @@ class MyJWTStrategy extends JWTStrategy {
       if (refreshVerify?.sub && existRefreshToken?.data[0] !== undefined) {
         accessToken = await auth.createAccessToken({
           sub: payload.sub,
-          isAdmin: payload.isAdmin,
+          role: payload.role,
         });
       }
     }

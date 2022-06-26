@@ -12,7 +12,7 @@ exports.Users = class Users extends Service {
     }
     const { email } = data;
     try {
-      if (JSON.parse(params.query.checking.toLowerCase())) {
+      if (JSON.parse(params.query?.checking?.toLowerCase())) {
         const existEmail = await this.Model.find({ email });
         if (
           existEmail[0] !== undefined &&
@@ -30,7 +30,7 @@ exports.Users = class Users extends Service {
         const isAdmin =
           params?.authentication &&
           params?.authentication.accessToken &&
-          decode(params?.authentication?.accessToken)?.isAdmin
+          decode(params?.authentication?.accessToken)?.role.includes("admin")
             ? true
             : false;
         if (isAdmin) {
@@ -70,7 +70,7 @@ exports.Users = class Users extends Service {
           );
         return "Redirect to verify page";
       } else {
-        if (params?.user?.isAdmin) {
+        if (params?.user?.role.includes("admin")) {
           return await super.patch(id, data, params);
         }
         const aliveCode = await this.app

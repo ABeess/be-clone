@@ -6,14 +6,9 @@ module.exports = function (app) {
   const modelName = "mailer";
   const mongooseClient = app.get("mongooseClient");
   const { Schema } = mongooseClient;
-  const schema = new Schema(
-    {
-      verifyCode: { type: String, required: true },
-    },
-    {
-      timestamps: true,
-    }
-  );
+  const schema = new Schema({
+    verifyCode: { type: String, required: true },
+  });
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel

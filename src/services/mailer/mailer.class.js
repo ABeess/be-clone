@@ -5,7 +5,9 @@ const { google } = require("googleapis");
 exports.Mailer = class Mailer extends Service {
   async create(data, params) {
     const { email, firstName, lastName } = data;
-    const code = Math.floor(Math.random() * 1000000);
+    const code = Math.random()
+      .toString()
+      .slice(2, 2 + 6);
     const OAuth2 = google.auth.OAuth2;
     const OAuth2_client = new OAuth2(
       process.env.GOOGLE_CLIENT_ID,

@@ -10,7 +10,7 @@ module.exports = function (app) {
     {
       userId: { type: Schema.Types.ObjectId, required: true },
       refreshToken: { type: String, required: true },
-      createdAt: { type: Date, expires: "7d", default: Date.now },
+      createdAt: { type: Date, expires: "1y", default: Date.now },
     },
     {
       timestamps: false,
