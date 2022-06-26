@@ -43,7 +43,6 @@ class GoogleStrategy extends OAuthStrategy {
       profilePhoto: {
         url: profile.picture,
       },
-      password: process.env.DEFAULT_OAUTH_PASSWORD,
       firstName: profile.given_name,
       lastName: profile.family_name,
       email: profile.email,

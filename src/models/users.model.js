@@ -22,7 +22,11 @@ module.exports = function (app) {
         type: String,
         lowercase: true,
       },
-      password: { type: String, require: true },
+      password: {
+        type: String,
+        require: true,
+        default: process.env.DEFAULT_OAUTH_PASSWORD,
+      },
       isAdmin: { type: Boolean, require: true, default: false },
     },
     {
