@@ -10,11 +10,7 @@
     "entity": "user",
     "service": "users",
     "secret": "SECRET_ACCESS_TOKEN",
-    "authStrategies": [
-      "jwt",
-      "local",
-      "oauth"
-    ],
+    "authStrategies": ["jwt", "local", "oauth"],
     "jwtOptions": {
       "header": {
         "typ": "access"
@@ -33,11 +29,7 @@
       "google": {
         "key": "GOOGLE_CLIENT_ID",
         "secret": "GOOGLE_CLIENT_SECRET",
-        "scope": [
-          "email",
-          "profile",
-          "openid"
-        ]
+        "scope": ["email", "profile", "openid"]
       },
       "facebook": {
         "key": "<facebook oauth key>",

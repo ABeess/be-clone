@@ -35,6 +35,7 @@ module.exports = function (app) {
       followings: [{ type: Schema.Types.ObjectId, ref: "users" }],
       followers: [{ type: Schema.Types.ObjectId, ref: "users" }],
       role: [{ type: String, enum: ["admin", "newbie"] }],
+      post: [{ type: Schema.Types.ObjectId, ref: "post" }],
     },
     {
       timestamps: true,

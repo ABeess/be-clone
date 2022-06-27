@@ -6,6 +6,8 @@ const mailer = require("./mailer/mailer.service.js");
 const refreshToken = require("./refresh-token/refresh-token.service.js");
 const lessonCategory = require('./lesson-category/lesson-category.service.js');
 const lesson = require('./lesson/lesson.service.js');
+const post = require('./post/post.service.js');
+const comment = require('./comment/comment.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -16,4 +18,6 @@ module.exports = function (app) {
   app.configure(refreshToken);
   app.configure(lessonCategory);
   app.configure(lesson);
+  app.configure(post);
+  app.configure(comment);
 };

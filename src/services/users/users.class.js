@@ -53,38 +53,38 @@ exports.Users = class Users extends Service {
       return new GeneralError(new Error(error || "Lỗi hệ thống"));
     }
   }
-  async patch(id, data, params) {
-    if (data?.googleId || data?.facebookId) {
-      return await super.patch(id, data, params);
-    }
-    const { email } = data;
-    try {
-      if (
-        params?.query?.checking &&
-        JSON.parse(params?.query?.checking?.toLowerCase())
-      ) {
-        const existEmail = await this.Model.find({ email });
-        if (existEmail[0] === undefined)
-          return new GeneralError(
-            new Error("Người dùng không tồn tại trong hệ thống!")
-          );
-        return "Redirect to verify page";
-      } else {
-        if (params?.user?.role.includes("admin")) {
-          return await super.patch(id, data, params);
-        }
-        const aliveCode = await this.app
-          .service("mailer")
-          .Model.find({ verifyCode: data.verifyCode });
-        if (aliveCode[0] === undefined) {
-          return new GeneralError(
-            new Error("Mã xác thực của bạn không đúng hoặc đã hết hạn")
-          );
-        }
-        return await super.patch(id, data, params);
-      }
-    } catch (error) {
-      return new GeneralError(new Error(error || "Lỗi hệ thống!"));
-    }
-  }
+  // async patch(id, data, params) {
+  //   if (data?.googleId || data?.facebookId) {
+  //     return await super.patch(id, data, params);
+  //   }
+  //   const { email } = data;
+  //   try {
+  //     if (
+  //       params?.query?.checking &&
+  //       JSON.parse(params?.query?.checking?.toLowerCase())
+  //     ) {
+  //       const existEmail = await this.Model.find({ email });
+  //       if (existEmail[0] === undefined)
+  //         return new GeneralError(
+  //           new Error("Người dùng không tồn tại trong hệ thống!")
+  //         );
+  //       return "Redirect to verify page";
+  //     } else {
+  //       if (params?.user?.role.includes("admin")) {
+  //         return await super.patch(id, data, params);
+  //       }
+  //       const aliveCode = await this.app
+  //         .service("mailer")
+  //         .Model.find({ verifyCode: data.verifyCode });
+  //       if (aliveCode[0] === undefined) {
+  //         return new GeneralError(
+  //           new Error("Mã xác thực của bạn không đúng hoặc đã hết hạn")
+  //         );
+  //       }
+  //       return await super.patch(id, data, params);
+  //     }
+  //   } catch (error) {
+  //     return new GeneralError(new Error(error || "Lỗi hệ thống!"));
+  //   }
+  // }
 };

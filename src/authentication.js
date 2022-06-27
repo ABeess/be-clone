@@ -96,6 +96,8 @@ class MyAuthenticationService extends AuthenticationService {
   }
   async authenticate(data, params, ...strategies) {
     const authResult = await super.authenticate(data, params, ...strategies);
+
+    console.log("authResult");
     if (existAccountChecking(authResult)) {
       OauthFlag().setFlag(true);
       return {
@@ -129,6 +131,7 @@ class MyJWTStrategy extends JWTStrategy {
     const time = new Date();
     const now = time.getTime();
     let accessToken = data?.accessToken;
+    console.log("authenticate :: accessToken", accessToken);
     if (payload.exp * 1000 <= now) {
       const cookieInfo = params.headers?.cookie;
       const cookieTokenKey = "refreshToken=";
@@ -142,9 +145,11 @@ class MyJWTStrategy extends JWTStrategy {
         },
         process.env.SECRET_REFRESH_TOKEN
       );
-      const existRefreshToken = await this.app
-        .service("refresh-token")
-        .find({ refreshToken, userId: payload?.userId || payload?.sub });
+      const existRefreshToken = await this.app.service("refresh-token").find({
+        query: { refreshToken, userId: payload?.userId || payload?.sub },
+        $limit: 1,
+      });
+      console.log("authenticate :: existRefreshToken", existRefreshToken);
       if (refreshVerify?.sub && existRefreshToken?.data[0] !== undefined) {
         accessToken = await auth.createAccessToken({
           sub: payload.sub,

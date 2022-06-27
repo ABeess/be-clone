@@ -8,7 +8,7 @@ module.exports = {
   before: {
     all: [softDelete()],
     find: [authenticate("jwt"), disablePagination(), search],
-    get: [authenticate("jwt")],
+    get: [],
     create: [hashPassword("password")],
     update: [hashPassword("password"), authenticate("jwt")],
     patch: [hashPassword("password"), authenticate("jwt")],
